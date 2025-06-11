@@ -1,10 +1,25 @@
 import React from 'react'
+import { Link, Outlet } from "react-router-dom";
 import './App.scss'
+// import Header from '../src/components/Header'
+import Header from './components/Header/Header'
 
 function App() {
   return (
     <>
-      <div className='app-container'>Hello World</div>
+      <div className='app-container'>
+        <div className='header-container'>
+          <Header />
+        </div>
+        <div className='main-container'>
+          <div className='slidebar-container'>
+
+          </div>
+          <div className='app-content'>
+            <Outlet />
+          </div>
+        </div>
+      </div>
     </>
   )
 }
