@@ -13,11 +13,10 @@ createRoot(document.getElementById('root')).render(
     <Routes>
       <Route path='/' element={<App />}>
         <Route index element={<HomePage />} />
-        <Route path='admins' element={<Admin />} >
-          <Route path='detail' element={<Child />} />
-        </Route>
+
         <Route path='users' element={<User />} />
       </Route>
+      <Route path='admins' element={<Admin />} />
     </Routes>
   </BrowserRouter>
 
