@@ -1,0 +1,42 @@
+.manage-user-container {
+    // .users-content {
+    //     .img-preview {
+    //         border: 1px solid red;
+    //         height: 150px;
+    //     }
+    // }
+}
+
+.modal-add-user{
+    .img-preview {
+        border: 1px  dashed #ccc;
+        height: 150px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        color: #ccc;
+        align-items: center;
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    }
+
+    .label-upload{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        border: 1px solid red;
+        width: fit-content;
+        padding: 3px 10px;
+        background-color: #eeee;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: all 0.6s;
+        &:hover{
+            background-color: #dcdcdc;
+        }
+    }
+}

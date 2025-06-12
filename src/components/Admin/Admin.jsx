@@ -13,10 +13,15 @@ function Admin() {
                     <SideBar collapsed={collapsed} />
                 </div>
                 <div className='admin-content'>
-                    <FaBars
-                        onClick={() => setCollapsed(!collapsed)}
-                    />
-                    admin content
+                    <div className='admin-header'>
+                        <FaBars
+                            onClick={() => setCollapsed(!collapsed)}
+                        />
+                    </div>
+                    <div className='admin-main'>
+                        <Outlet />
+                    </div>
+
                 </div>
             </div>
         </>

@@ -12,7 +12,7 @@ function App() {
           <Header />
         </div>
         <div className='main-container'>
-          <div className='slidebar-container'>
+          <div className='slidenav-container'>
 
           </div>
           <div className='app-content'>
