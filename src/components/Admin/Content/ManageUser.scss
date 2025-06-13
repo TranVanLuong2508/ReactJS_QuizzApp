@@ -1,10 +1,22 @@
 .manage-user-container {
-    // .users-content {
-    //     .img-preview {
-    //         border: 1px solid red;
-    //         height: 150px;
-    //     }
-    // }
+    padding: 10px;
+
+
+    .title{
+        font-weight: 600;
+        font-size: 20px;
+    }
+
+    .users-content {
+
+
+        .btn-add-new {
+            border: none;
+            button {
+                margin: 15px 0;
+            }
+        }
+    }
 }
 
 .modal-add-user{

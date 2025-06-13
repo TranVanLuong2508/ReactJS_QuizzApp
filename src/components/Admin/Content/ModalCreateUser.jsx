@@ -2,18 +2,31 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FcPlus } from "react-icons/fc"
+import { adminService } from '../../../services';
+import { toast } from 'react-toastify';
 
-function ModalCreateUser() {
-    const [show, setShow] = useState(false);
+function ModalCreateUser(props) {
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const { show, setShow } = props;
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('USER');
     const [image, setImage] = useState('');
     const [imagePreview, setImagePreview] = useState('');
+
+    const handleClose = () => {
+        setShow(false)
+        setEmail('');
+        setPassword('');
+        setUsername('');
+        setRole('USER');
+        setImage('');
+        setImagePreview('');
+    };
+
+
     const handleUploadImg = (eventUpload) => {
         if (eventUpload && eventUpload.target.files && eventUpload.target.files[0]) {
             let data = eventUpload.target.files
@@ -26,12 +39,48 @@ function ModalCreateUser() {
         }
     }
 
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
+
+
+    const handleSubmitCreateUser = async () => {
+
+        //validate email
+        const isValidEmail = validateEmail(email)
+        if (!isValidEmail) {
+            toast.error('Invalid Email !')
+            return
+        }
+        if (!password) {
+            toast.error('Invalid Password !')
+            return
+        }
+
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('username', username);
+        formData.append('role', role);
+        formData.append('userImage', image);
+        let res = await adminService.createNewUser(formData)
+        console.log('res: ', res);
+        if (res && res.EC === 0) {
+            toast.success(res.EM)
+            handleClose()
+        }
+
+        if (res && res.EC) {
+            toast.error(res.EM)
+        }
+    }
+
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
-                Launch demo modal
-            </Button>
-
             <Modal
                 show={show}
                 onHide={handleClose}
@@ -104,8 +153,11 @@ function ModalCreateUser() {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
+                    <Button
+                        variant="primary"
+                        onClick={() => handleSubmitCreateUser()}
+                    >
+                        Save
                     </Button>
                 </Modal.Footer>
             </Modal>
