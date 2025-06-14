@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FcPlus } from "react-icons/fc"
 import { adminService } from '../../../services';
 import { toast } from 'react-toastify';
+import _ from 'lodash'
 
-function ModalCreateUser(props) {
+function ModalUpdateUser(props) {
 
-    const { show, setShow, fetchListUserWithPaginate, setCurrentPage } = props;
+    const { show, setShow, currentPage, fetchListUserWithPaginate, userEdit, resetUserEdit } = props;
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -15,6 +16,21 @@ function ModalCreateUser(props) {
     const [role, setRole] = useState('USER');
     const [image, setImage] = useState('');
     const [imagePreview, setImagePreview] = useState('');
+
+    useEffect(() => {
+        console.log('use effect')
+        if (!_.isEmpty(userEdit)) {
+            //update state
+            setEmail(userEdit.email);
+            setPassword('HARDCODE');
+            setUsername(userEdit.username);
+            setRole(userEdit.role);
+            setImage('');
+            if (userEdit.image) {
+                setImagePreview(`data:image/jpeg;base64,${userEdit.image}`);
+            }
+        }
+    }, [userEdit])
 
     const handleClose = () => {
         setShow(false)
@@ -24,7 +40,10 @@ function ModalCreateUser(props) {
         setRole('USER');
         setImage('');
         setImagePreview('');
+        resetUserEdit()
     };
+
+
 
 
     const handleUploadImg = (eventUpload) => {
@@ -48,7 +67,7 @@ function ModalCreateUser(props) {
     };
 
 
-    const handleSubmitCreateUser = async () => {
+    const handleSubmitUpdateUser = async () => {
 
         //validate email
         const isValidEmail = validateEmail(email)
@@ -56,19 +75,13 @@ function ModalCreateUser(props) {
             toast.error('Invalid Email !')
             return
         }
-        if (!password) {
-            toast.error('Invalid Password !')
-            return
-        }
 
 
-        let res = await adminService.createNewUser(email, password, username, role, image)
-        console.log('res: ', res);
+        let res = await adminService.updateUser(userEdit.id, username, role, image)
         if (res && res.EC === 0) {
             toast.success(res.EM)
             handleClose()
-            setCurrentPage(1)
-            await fetchListUserWithPaginate(1)
+            await fetchListUserWithPaginate(currentPage)
         }
 
         if (res && res.EC !== 0) {
@@ -86,13 +99,14 @@ function ModalCreateUser(props) {
                 className='modal-add-user'
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Create User</Modal.Title>
+                    <Modal.Title>Update User</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form className="row g-3">
                         <div className="col-md-6">
                             <label className="form-label">Email</label>
                             <input
+                                disabled
                                 type="email"
                                 className="form-control"
                                 value={email}
@@ -102,6 +116,7 @@ function ModalCreateUser(props) {
                         <div className="col-md-6">
                             <label className="form-label">Password</label>
                             <input
+                                disabled
                                 type="password"
                                 className="form-control"
                                 value={password}
@@ -152,7 +167,7 @@ function ModalCreateUser(props) {
                     </Button>
                     <Button
                         variant="primary"
-                        onClick={() => handleSubmitCreateUser()}
+                        onClick={() => handleSubmitUpdateUser()}
                     >
                         Save
                     </Button>
@@ -162,4 +177,4 @@ function ModalCreateUser(props) {
     );
 }
 
-export default ModalCreateUser;
+export default ModalUpdateUser;

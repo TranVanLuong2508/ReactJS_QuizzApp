@@ -9,6 +9,25 @@
 
     .users-content {
 
+        .table-users-container {
+            padding: 0 10px;
+            .table-user-container {
+                position: relative;
+                height: 390px;
+
+                // flex-direction: column;
+                // justify-content: space-around;
+                .user-pagination {
+                    width: 100%;
+                    display: flex;
+                    justify-content:center;
+                    position: absolute;
+                    bottom: 0;
+                }
+            }
+
+        }
+
 
         .btn-add-new {
             border: none;
