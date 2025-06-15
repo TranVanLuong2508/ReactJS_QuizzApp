@@ -1,8 +1,8 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import VideoHomePage from '../../assets/video-homepage.mp4'
-
 function HomePage() {
+
     return (
         <>
             <div className='homepage-container' >

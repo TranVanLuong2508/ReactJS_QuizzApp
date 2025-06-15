@@ -67,7 +67,7 @@ function ManageUser() {
     }
 
     const resetUserToDelete = () => {
-        setUserToEdit({})
+        setUserToDelete({})
     }
 
     return (
