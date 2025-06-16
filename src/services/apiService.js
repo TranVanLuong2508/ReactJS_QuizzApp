@@ -4,7 +4,19 @@ const apiService = {
         return axios.post('/api/v1/login', {
             email: userEmail,
             password: userPassword,
-            delay: 2000
+            delay: 1000
+        })
+    },
+
+    getQuizByUser: () => {
+        return axios.get('/api/v1/quiz-by-participant')
+    },
+
+    getQuestionById: (quizId) => {
+        return axios.get('/api/v1/questions-by-quiz', {
+            params: {
+                quizId: quizId
+            }
         })
     }
 }

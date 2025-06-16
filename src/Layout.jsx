@@ -9,6 +9,16 @@ import HomePage from './components/Home/HomePage.jsx';
 import ManageUser from './components/Admin/Content/ManageUser.jsx';
 import DashBoard from './components/Admin/Content/DashBoard.jsx';
 import Login from './components/Auth/Login.jsx';
+import ListQuiz from './components/User/ListQuiz.jsx';
+import QuizDetail from './components/User/QuizDetail.jsx';
+
+const NotFound = () => {
+    return (
+        <div className=' alert alert-danger container mt-3 text-center'>
+            404. Not found data with your current URL
+        </div>
+    )
+}
 
 const Layout = () => {
     return (
@@ -16,13 +26,15 @@ const Layout = () => {
             <Routes>
                 <Route path='/' element={<App />}>
                     <Route index element={<HomePage />} />
-                    <Route path='users' element={<User />} />
+                    <Route path='users' element={<ListQuiz />} />
                 </Route>
                 <Route path='/admins' element={<Admin />}>
                     <Route path='manage-users' element={<ManageUser />} />
                     <Route index element={<DashBoard />} />
                 </Route>
                 < Route path='/login' element={<Login />} />
+                < Route path='/quiz/:id' element={<QuizDetail />} />
+                < Route path='*' element={<NotFound />} />
             </Routes>
             <ToastContainer
                 position="top-right"
