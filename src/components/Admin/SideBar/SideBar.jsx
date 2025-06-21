@@ -15,8 +15,11 @@ import { Link } from 'react-router-dom';
 import sidebarBg from '../../../assets/sidebar/background.jpg';
 import './SideBar.scss'
 
+import { useNavigate } from 'react-router-dom';
+
 const SideBar = (props) => {
     const { collapsed, toggled, handleToggleSidebar } = props;
+    const navigte = useNavigate()
     return (
         <>
             <ProSidebar
@@ -40,7 +43,9 @@ const SideBar = (props) => {
                         }}
                     >
                         <DiReact size={'3em'} color='00bfff' />
-                        <span>Quizz App</span>
+                        <span onClick={() => { navigte('/') }}>
+                            Quizz App
+                        </span>
                     </div>
                 </SidebarHeader>
 
@@ -63,8 +68,14 @@ const SideBar = (props) => {
                                 Quản lý users
                                 <Link to={'/admins/manage-users'} />
                             </MenuItem>
-                            <MenuItem>Quản lý bài Quizz</MenuItem>
-                            <MenuItem>Quản lý câu hỏi</MenuItem>
+                            <MenuItem>
+                                Quản lý bài Quizz
+                                <Link to={'/admins/manage-quizes'} />
+                            </MenuItem>
+                            <MenuItem>
+                                Quản lý câu hỏi
+                                <Link to={'/admins/manage-questions'} />
+                            </MenuItem>
                         </SubMenu>
 
                     </Menu>

@@ -43,7 +43,21 @@ const AdminService = {
                 id: user.id
             }
         })
-    }
+    },
+
+    putUpdateQuizForAdmin: (id, name, description, type, image) => {
+        const formData = new FormData();
+        formData.append('id', id);
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('difficulty', type);
+        formData.append('quizImage', image);
+
+        return axios.put('/api/v1/quiz', formData)
+    },
+    deleteQuizForAdmin: (id) => {
+        return axios.delete(`/api/v1/quiz/${id}`)
+    },
 }
 
 export default AdminService;

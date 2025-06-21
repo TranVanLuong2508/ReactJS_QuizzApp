@@ -6,12 +6,14 @@ import { useLocation } from 'react-router-dom'
 import _ from 'lodash'
 
 import Question from './Question/Question'
+import ModalResult from './ModalResult'
 
 const QuizDetail = () => {
     const params = useParams()
     const location = useLocation()
     const [dataQuiz, setDataQuiz] = useState([])
     const [quesIndex, setQuesIndex] = useState(0)
+    const [isShowModalResult, setIsShowModalResult] = useState(false)
     const quizId = params.id
 
     useEffect(() => {
@@ -57,7 +59,6 @@ const QuizDetail = () => {
     const handleCheckbox = (answerId, questionId) => {
         let dataQuizClone = _.cloneDeep(dataQuiz)
         let question = dataQuizClone.find(item => +item.questionId === +questionId)
-        console.log('check ques', question)
         if (question && question.answers) {
             question.answers = question.answers.map((item) => {
                 if (+item.id === +answerId) {
@@ -74,7 +75,7 @@ const QuizDetail = () => {
         }
     }
 
-    const handleFinishQuiz = () => {
+    const handleFinishQuiz = async () => {
         console.log('check data befor submit', dataQuiz)
         let payload = {
             quizId: +quizId,
@@ -93,16 +94,21 @@ const QuizDetail = () => {
                     }
                 })
                 userAnswers.push({
-                    questionId: questionId,
+                    questionId: +questionId,
                     userAnswerId: userAnswerId
                 })
             })
         }
+        console.log('check type', typeof userAnswers[0].questionId)
+        console.log('check type', typeof payload.quizId)
         payload.answers = userAnswers
-
         console.log('final data', payload)
-
-
+        let submitQuizResult = await apiService.postSunmitQuiz(payload)
+        if (submitQuizResult && submitQuizResult.EC === 0) {
+            setIsShowModalResult(true)
+        } else {
+            alert('Something wrongs....')
+        }
     }
 
     return (
@@ -145,6 +151,10 @@ const QuizDetail = () => {
             <div className='right-content'>
                 count down
             </div>
+            <ModalResult
+                show={isShowModalResult}
+                seShow={setIsShowModalResult}
+            />
         </div>
     )
 }

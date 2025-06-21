@@ -18,7 +18,29 @@ const apiService = {
                 quizId: quizId
             }
         })
+    },
+
+    postSunmitQuiz: (data) => {
+        console.log('check submit', data)
+        return axios.post('/api/v1/quiz-submit', { ...data })
+    },
+
+    createQuiz: (quizName, quizDescription, quizType, quizImage) => {
+
+        const quizData = new FormData()
+        quizData.append('name', quizName)
+        quizData.append('description', quizDescription)
+        quizData.append('difficulty', quizType)
+        quizData.append('quizImage', quizImage)
+
+        return axios.post('/api/v1/quiz', quizData)
+    },
+
+    getAllQuiz: () => {
+        return axios.get('/api/v1/quiz/all')
     }
+
+
 }
 
 export default apiService;

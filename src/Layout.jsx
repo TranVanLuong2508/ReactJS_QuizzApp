@@ -11,6 +11,8 @@ import DashBoard from './components/Admin/Content/DashBoard.jsx';
 import Login from './components/Auth/Login.jsx';
 import ListQuiz from './components/User/ListQuiz.jsx';
 import QuizDetail from './components/User/QuizDetail.jsx';
+import ManageQuiz from './components/Admin/Content/Quiz/ManageQuiz.jsx';
+import Question from './components/Admin/Content/Quiz/Question/Question.jsx';
 
 const NotFound = () => {
     return (
@@ -30,6 +32,8 @@ const Layout = () => {
                 </Route>
                 <Route path='/admins' element={<Admin />}>
                     <Route path='manage-users' element={<ManageUser />} />
+                    <Route path='manage-quizes' element={<ManageQuiz />} />
+                    <Route path='manage-questions' element={<Question />} />
                     <Route index element={<DashBoard />} />
                 </Route>
                 < Route path='/login' element={<Login />} />
