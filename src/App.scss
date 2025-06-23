@@ -1,13 +1,13 @@
 .body {
   padding: 0;
-    margin: 0;
-    overflow: hidden;
+  margin: 0;
+  overflow: hidden;
 }
 
 
 @media (min-width: 1350px) {
   .container, .container-lg, .container-md, .container-sm, .container-xl {
-    max-width: 1500px !important;
+    max-width: 1400px !important;
   }
 }
 .app-container {
@@ -84,6 +84,10 @@
     } 
   }
 
+  .app-content {
+    height: calc(100vh - 60px);
+}
+
  
 }
 video {
@@ -91,3 +95,4 @@ video {
   bottom: 0;
   width: 100vw;
 }
+

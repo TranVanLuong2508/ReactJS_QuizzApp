@@ -58,6 +58,37 @@ const AdminService = {
     deleteQuizForAdmin: (id) => {
         return axios.delete(`/api/v1/quiz/${id}`)
     },
+
+    createQuestionForQuiz: (quizId, quizDescription, questionImg) => {
+
+        const formData = new FormData();
+        formData.append('quiz_id', quizId);
+        formData.append('description', quizDescription);
+        formData.append('questionImage', questionImg);
+        return axios.post('/api/v1/question', formData)
+    },
+
+    createNewAnswerForQuestion: (quesId, ansDescrition, correctAns) => {
+        return axios.post('/api/v1/answer', {
+            description: ansDescrition,
+            correct_answer: correctAns,
+            question_id: +quesId
+        })
+    },
+
+    postAssignQuizToUser: (quizId, userId) => {
+        return axios.post('/api/v1/quiz-assign-to-user', {
+            quizId, userId
+        })
+    },
+
+    getQuizDataWithQA: (quizId) => {
+        return axios.get(`/api/v1/quiz-with-qa/${quizId}`)
+    },
+
+    postUpsertQA: (data) => {
+        return axios.post('/api/v1/quiz-upsert-qa', data)
+    }
 }
 
 export default AdminService;

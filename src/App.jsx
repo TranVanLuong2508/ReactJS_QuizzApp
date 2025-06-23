@@ -3,6 +3,8 @@ import { Link, Outlet } from "react-router-dom";
 import './App.scss'
 // import Header from '../src/components/Header'
 import Header from './components/Header/Header'
+import PerfectScrollbar from 'react-perfect-scrollbar'
+import 'react-perfect-scrollbar/dist/css/styles.css';
 
 function App() {
   return (
@@ -16,7 +18,9 @@ function App() {
 
           </div>
           <div className='app-content'>
-            <Outlet />
+            <PerfectScrollbar>
+              <Outlet />
+            </PerfectScrollbar>
           </div>
         </div>
       </div>

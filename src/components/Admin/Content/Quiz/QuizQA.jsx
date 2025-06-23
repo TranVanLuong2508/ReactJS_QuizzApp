@@ -5,13 +5,13 @@ import { BsPatchMinusFill } from 'react-icons/bs'
 import { RiImageAddFill } from 'react-icons/ri'
 import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash'
-import './Question.scss'
-import apiService from '../../../../../services/apiService';
-import AdminService from '../../../../../services/AdminService';
+import './QuizQA.scss'
+import { adminService, apiService } from '../../../../services';
+import AdminService from '../../../../services/AdminService';
 import { toast } from 'react-toastify'
 
 
-const Question = () => {
+const QuizQA = () => {
 
     const initQuestions =
         [
@@ -51,6 +51,35 @@ const Question = () => {
     useEffect(() => {
         fetchQuiz()
     }, [])
+
+    useEffect(() => {
+        if (selectedQuiz && selectedQuiz.value) {
+            fetchQuizWithQA()
+        }
+    }, [selectedQuiz])
+
+    const urltoFile = (url, filename, mimeType) => {
+        return fetch(url)
+            .then(res => res.arrayBuffer())
+            .then(buf => new File([buf], filename, { type: mimeType }));
+    }
+
+    const fetchQuizWithQA = async () => {
+        let res = await adminService.getQuizDataWithQA(selectedQuiz.value)
+        console.log('checkl res', res)
+        if (res && res.EC === 0) {
+            let newQA = []
+            for (let i = 0; i < res.DT.qa.length; i++) {
+                let q = res.DT.qa[i]
+                if (q.imageFile) {
+                    q.imageFile = await urltoFile(`data:image/png;base64,${q.imageFile}`, `Question-${q.id}.png`, 'image/png')
+                    q.imageName = `Question-${q.id}.png`
+                }
+                newQA.push(q)
+            }
+            setQuestions(newQA)
+        }
+    }
 
     const fetchQuiz = async () => {
         let res = await apiService.getAllQuiz()
@@ -158,6 +187,15 @@ const Question = () => {
         }
     }
 
+    const toBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => resolve(reader.result)
+            reader.onerror = (error) => reject(error)
+        })
+    }
+
     const handleSubmitQuestionForQuiz = async () => {
         // await Promise.all(questions.map(async (ques) => {
         //     const q = await AdminService.createQuestionForQuiz(
@@ -210,21 +248,28 @@ const Question = () => {
             return
         }
 
-        for (const question of questions) {
-            const q = await AdminService.createQuestionForQuiz(
-                +selectedQuiz.value,
-                question.description,
-                question.imageFile
-            )
-
-            for (const answer of question.answers) {
-                await AdminService.createNewAnswerForQuestion(q.DT.id, answer.description, answer.isCorrect,)
+        let questionClone = _.cloneDeep(questions)
+        for (let index = 0; index < questionClone.length; index++) {
+            if (questionClone[index].imageFile) {
+                questionClone[index].imageFile = await toBase64(questionClone[index].imageFile)
             }
         }
 
-        toast.success('Create new question and answers succeed')
-        setQuestions(initQuestions)
+        let res = await AdminService.postUpsertQA({
+            quizId: selectedQuiz.value,
+            questions: questionClone
+        })
+
+        if (res && res.EC === 0) {
+            toast.success(res.EM)
+            fetchQuizWithQA()
+        }
+
+        // toast.success('Create new question and answers succeed')
+        // setQuestions(initQuestions)
     }
+
+
 
     return (
         <div className='questions-container'>
@@ -343,4 +388,4 @@ const Question = () => {
     )
 }
 
-export default Question
+export default QuizQA
