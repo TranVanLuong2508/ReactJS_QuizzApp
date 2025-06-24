@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer, Slide } from 'react-toastify';
 
@@ -13,6 +13,7 @@ import ListQuiz from './components/User/ListQuiz.jsx';
 import QuizDetail from './components/User/QuizDetail.jsx';
 import ManageQuiz from './components/Admin/Content/Quiz/ManageQuiz.jsx';
 import Question from './components/Admin/Content/Quiz/Question/Question.jsx';
+import PrivateRoute from './routes/PrivateRoute.jsx';
 
 const NotFound = () => {
     return (
@@ -24,13 +25,21 @@ const NotFound = () => {
 
 const Layout = () => {
     return (
-        <>
+        <Suspense fallback="...is loading">
             <Routes>
                 <Route path='/' element={<App />}>
                     <Route index element={<HomePage />} />
-                    <Route path='users' element={<ListQuiz />} />
+                    <Route path='users' element={
+                        <PrivateRoute>
+                            <ListQuiz />
+                        </PrivateRoute>
+                    } />
                 </Route>
-                <Route path='/admins' element={<Admin />}>
+                <Route path='/admins' element={
+                    <PrivateRoute>
+                        <Admin />
+                    </PrivateRoute>
+                }>
                     <Route path='manage-users' element={<ManageUser />} />
                     <Route path='manage-quizes' element={<ManageQuiz />} />
                     <Route path='manage-questions' element={<Question />} />
@@ -53,7 +62,7 @@ const Layout = () => {
                 theme="light"
                 transition={Slide}
             />
-        </>
+        </Suspense>
     )
 }
 

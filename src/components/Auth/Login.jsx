@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { ImSpinner10 } from "react-icons/im";
 import './Login.scss'
 import userActions from '../../redux/actions/userActions'
+import Language from '../Header/Language'
 
 
 const Login = () => {
@@ -48,6 +49,13 @@ const Login = () => {
         }
     }
 
+    const handleKeyDown = (event) => {
+
+        if (event.keyCode === 13 && event.key === 'Enter') {
+            handleLogin()
+        }
+    }
+
     return (
         <div className='login-container'>
             <div className='header'>
@@ -55,6 +63,7 @@ const Login = () => {
                 <button
                 // onClick={() => { dispatch(increment()) }}
                 >Sign up</button>
+                <Language />
             </div>
             <div className='title col-4 mx-auto'>
                 QUIZZ APP
@@ -81,6 +90,7 @@ const Login = () => {
                         placeholder='Your password'
                         value={password}
                         onChange={(eventInput) => setPassword(eventInput.target.value)}
+                        onKeyDown={(event) => { handleKeyDown(event) }}
                     />
                 </div>
                 <span>Forgot password ?</span>

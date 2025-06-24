@@ -6,6 +6,11 @@ const userActions = {
             type: ACTIONS_TYPE.USER_LOGIN_SUCCESS,
             payload: userData
         }
+    },
+    UserLogOut: () => {
+        return {
+            type: ACTIONS_TYPE.USER_LOGOUT_SUCCESS,
+        }
     }
 }
 

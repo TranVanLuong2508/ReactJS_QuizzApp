@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { NavLink, useParams } from 'react-router-dom'
 import { apiService } from '../../services'
 import './QuizDetail.scss'
 import { useLocation } from 'react-router-dom'
@@ -7,6 +7,8 @@ import _ from 'lodash'
 
 import Question from './Question/Question'
 import ModalResult from './ModalResult'
+import RightContent from './Content/RightContent'
+import Breadcrumb from 'react-bootstrap/Breadcrumb'
 
 const QuizDetail = () => {
     const params = useParams()
@@ -14,6 +16,7 @@ const QuizDetail = () => {
     const [dataQuiz, setDataQuiz] = useState([])
     const [quesIndex, setQuesIndex] = useState(0)
     const [isShowModalResult, setIsShowModalResult] = useState(false)
+    const [resultSubmit, setResultSubmit] = useState({})
     const quizId = params.id
 
     useEffect(() => {
@@ -37,6 +40,7 @@ const QuizDetail = () => {
                         item.answers.isSelected = false
                         answers.push(item.answers)
                     })
+                    answers = _.orderBy(answers, ['id'], ['asc'])
                     return { questionId: key, answers, questionDescription, image }
                 })
                 .value()
@@ -105,6 +109,8 @@ const QuizDetail = () => {
         console.log('final data', payload)
         let submitQuizResult = await apiService.postSunmitQuiz(payload)
         if (submitQuizResult && submitQuizResult.EC === 0) {
+            console.log('check sub', submitQuizResult)
+            setResultSubmit(submitQuizResult.DT)
             setIsShowModalResult(true)
         } else {
             alert('Something wrongs....')
@@ -112,50 +118,64 @@ const QuizDetail = () => {
     }
 
     return (
-        <div className='detail-quiz-container'>
-            <div className='left-content'>
-                <div className='title'>
-                    Quiz {quizId}: {location?.state.quizTitle}
+        <>
+            <Breadcrumb className='quiz-detail-new-header'>
+                <NavLink to={'/'} className={'breadcrumb-item'}>Trang chủ</NavLink>
+                <NavLink to={'/users'} className={'breadcrumb-item'}>Người dùng</NavLink>
+                <Breadcrumb.Item active>Quiz</Breadcrumb.Item>
+            </Breadcrumb>
+            <div className='detail-quiz-container'>
+                <div className='left-content'>
+                    <div className='title'>
+                        Quiz {quizId}: {location?.state.quizTitle}
+                    </div>
+                    <div className='q-body'>
+                        <img src="" alt="" />
+                    </div>
+                    <div className='q-content'>
+                        <Question
+                            handleCheckbox={handleCheckbox}
+                            quesIndex={quesIndex}
+                            questionData={dataQuiz && dataQuiz.length > 0 ? dataQuiz[quesIndex] : []}
+                        />
+                    </div>
+                    <div className='footer'>
+                        <button
+                            className='btn btn-secondary'
+                            onClick={() => handlePrev()}
+                        >
+                            Prev
+                        </button>
+                        <button
+                            className='btn btn-primary ml-3'
+                            onClick={() => handleNext()}
+                        >
+                            Next
+                        </button>
+                        <button
+                            className='btn btn-warning ml-3'
+                            onClick={() => handleFinishQuiz()}
+                        >
+                            Finish
+                        </button>
+                    </div>
                 </div>
-                <div className='q-body'>
-                    <img src="" alt="" />
-                </div>
-                <div className='q-content'>
-                    <Question
-                        handleCheckbox={handleCheckbox}
-                        quesIndex={quesIndex}
-                        questionData={dataQuiz && dataQuiz.length > 0 ? dataQuiz[quesIndex] : []}
+                <div className='right-content'>
+                    <RightContent
+                        handleFinishQuiz={handleFinishQuiz}
+                        dataQuiz={dataQuiz}
+                        setQuesIndex={setQuesIndex}
                     />
                 </div>
-                <div className='footer'>
-                    <button
-                        className='btn btn-secondary'
-                        onClick={() => handlePrev()}
-                    >
-                        Prev
-                    </button>
-                    <button
-                        className='btn btn-primary ml-3'
-                        onClick={() => handleNext()}
-                    >
-                        Next
-                    </button>
-                    <button
-                        className='btn btn-warning ml-3'
-                        onClick={() => handleFinishQuiz()}
-                    >
-                        Finish
-                    </button>
-                </div>
+                <ModalResult
+                    show={isShowModalResult}
+                    setShow={setIsShowModalResult}
+                    resultSubmit={resultSubmit}
+                    setResultSubmit={setResultSubmit}
+                />
             </div>
-            <div className='right-content'>
-                count down
-            </div>
-            <ModalResult
-                show={isShowModalResult}
-                seShow={setIsShowModalResult}
-            />
-        </div>
+        </>
+
     )
 }
 

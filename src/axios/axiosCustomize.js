@@ -14,6 +14,11 @@ instance.interceptors.response.use(
     },
     (error) => {
         nProgress.done()
+        //token expired EC===-999
+        if (error.response.data && error.response.data.EC === -999) {
+            window.location.href = '/login'
+        }
+
         return error && error.response ? error.response.data : Promise.reject(error)
     }
 );

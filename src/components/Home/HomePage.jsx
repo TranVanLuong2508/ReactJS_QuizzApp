@@ -3,9 +3,11 @@ import { Outlet } from 'react-router-dom'
 import VideoHomePage from '../../assets/video-homepage.mp4'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation, Trans } from 'react-i18next';
 function HomePage() {
     const isAuthenticated = useSelector(state => state.user.isAuthenticated)
     const navigate = useNavigate()
+    const { t } = useTranslation();
     return (
         <>
             <div className='homepage-container' >
@@ -16,10 +18,12 @@ function HomePage() {
                     />
                 </video>
                 <div className='homepage-content'>
-                    <div className='title-1'>There's a beter way to ask</div>
-                    <div className='title-2'>You don't want to make a boring form.
-                        And your audience won't answer one.
-                        Create a typeform instead-and make everyone happy.
+                    <div className='title-1'>
+                        {/* There's a beter way to ask */}
+                        {t('homepage.title1')}
+                    </div>
+                    <div className='title-2'>
+                        {t('homepage.title2')}
                     </div>
                     <div className='title-3'>
                         {isAuthenticated === false ?

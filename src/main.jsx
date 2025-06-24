@@ -7,6 +7,7 @@ import Layout from './Layout';
 import { store, persistor } from './redux/store';
 import 'nprogress/nprogress.css'
 import { PersistGate } from 'redux-persist/integration/react';
+import i18n from './utils/i18n';
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>

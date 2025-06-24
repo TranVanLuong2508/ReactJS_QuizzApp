@@ -38,6 +38,16 @@ const apiService = {
 
     getAllQuiz: () => {
         return axios.get('/api/v1/quiz/all')
+    },
+
+    LogOut: (email, refresh_token) => {
+        return axios.post('/api/v1/logout', {
+            email, refresh_token
+        })
+    },
+
+    getOverView: () => {
+        return axios.get('/api/v1/overview')
     }
 
 

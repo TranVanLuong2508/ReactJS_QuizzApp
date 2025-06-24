@@ -4,11 +4,13 @@ import { FcPlus } from "react-icons/fc"
 
 function ModalResult(props) {
 
-    const { show, setShow } = props;
+    const { show, setShow, resultSubmit, setResultSubmit } = props;
+
 
 
     const handleClose = () => {
         setShow(false)
+        setResultSubmit({})
     };
 
     return (
@@ -24,7 +26,8 @@ function ModalResult(props) {
                     <Modal.Title>Your result</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-
+                    <div>Total Questions : {resultSubmit.countTotal}</div>
+                    <div>Total Correct Answer : {resultSubmit.countCorrect}</div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
